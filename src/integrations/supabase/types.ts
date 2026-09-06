@@ -14,7 +14,237 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      draft_messages: {
+        Row: {
+          content: string
+          created_at: string
+          draft_id: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          draft_id: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          draft_id?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draft_messages_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "drafts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      draft_sources: {
+        Row: {
+          content: string | null
+          created_at: string
+          draft_id: string
+          id: string
+          kind: string
+          label: string | null
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          draft_id: string
+          id?: string
+          kind?: string
+          label?: string | null
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          draft_id?: string
+          id?: string
+          kind?: string
+          label?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draft_sources_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "drafts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      draft_versions: {
+        Row: {
+          created_at: string
+          draft_id: string
+          id: string
+          note: string | null
+          segments: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          draft_id: string
+          id?: string
+          note?: string | null
+          segments?: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          draft_id?: string
+          id?: string
+          note?: string | null
+          segments?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draft_versions_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "drafts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drafts: {
+        Row: {
+          created_at: string
+          id: string
+          idea: string | null
+          kind: string
+          posted_at: string | null
+          posted_url: string | null
+          segments: Json
+          share_token: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idea?: string | null
+          kind?: string
+          posted_at?: string | null
+          posted_url?: string | null
+          segments?: Json
+          share_token?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idea?: string | null
+          kind?: string
+          posted_at?: string | null
+          posted_url?: string | null
+          segments?: Json
+          share_token?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+          x_handle: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+          x_handle?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+          x_handle?: string | null
+        }
+        Relationships: []
+      }
+      voice_profiles: {
+        Row: {
+          created_at: string
+          forbidden_phrases: string[]
+          formats: string | null
+          id: string
+          rhythm: string | null
+          signature_phrases: string[]
+          source_sample: string | null
+          summary: string | null
+          tone: string | null
+          updated_at: string
+          user_id: string
+          vocabulary: string[]
+          x_handle: string | null
+        }
+        Insert: {
+          created_at?: string
+          forbidden_phrases?: string[]
+          formats?: string | null
+          id?: string
+          rhythm?: string | null
+          signature_phrases?: string[]
+          source_sample?: string | null
+          summary?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_id: string
+          vocabulary?: string[]
+          x_handle?: string | null
+        }
+        Update: {
+          created_at?: string
+          forbidden_phrases?: string[]
+          formats?: string | null
+          id?: string
+          rhythm?: string | null
+          signature_phrases?: string[]
+          source_sample?: string | null
+          summary?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_id?: string
+          vocabulary?: string[]
+          x_handle?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
