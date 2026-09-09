@@ -16,9 +16,12 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as AuthenticatedAppDraftsRouteImport } from './routes/_authenticated/app.drafts'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppVoiceRouteImport } from './routes/_authenticated/app.voice'
+import { Route as AuthenticatedAppDraftsIdRouteImport } from './routes/_authenticated/app.drafts.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,9 +57,19 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppDraftsRoute = AuthenticatedAppDraftsRouteImport.update({
+  id: '/drafts',
+  path: '/drafts',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
 const AuthenticatedAppSettingsRoute =
@@ -70,6 +83,12 @@ const AuthenticatedAppVoiceRoute = AuthenticatedAppVoiceRouteImport.update({
   path: '/voice',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppDraftsIdRoute =
+  AuthenticatedAppDraftsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAppDraftsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,9 +97,12 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/voice': typeof AuthenticatedAppVoiceRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -88,9 +110,12 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/voice': typeof AuthenticatedAppVoiceRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,9 +126,12 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/share/$token': typeof ShareTokenRoute
+  '/_authenticated/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/voice': typeof AuthenticatedAppVoiceRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_authenticated/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,9 +142,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/app'
     | '/blog/$slug'
+    | '/share/$token'
+    | '/app/drafts'
     | '/app/settings'
     | '/app/voice'
     | '/app/'
+    | '/app/drafts/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -124,9 +155,12 @@ export interface FileRouteTypes {
     | '/blog'
     | '/pricing'
     | '/blog/$slug'
+    | '/share/$token'
+    | '/app/drafts'
     | '/app/settings'
     | '/app/voice'
     | '/app'
+    | '/app/drafts/$id'
   id:
     | '__root__'
     | '/'
@@ -136,9 +170,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/_authenticated/app'
     | '/blog/$slug'
+    | '/share/$token'
+    | '/_authenticated/app/drafts'
     | '/_authenticated/app/settings'
     | '/_authenticated/app/voice'
     | '/_authenticated/app/'
+    | '/_authenticated/app/drafts/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -147,6 +184,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   PricingRoute: typeof PricingRoute
+  ShareTokenRoute: typeof ShareTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -200,11 +238,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/drafts': {
+      id: '/_authenticated/app/drafts'
+      path: '/drafts'
+      fullPath: '/app/drafts'
+      preLoaderRoute: typeof AuthenticatedAppDraftsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/settings': {
@@ -221,16 +273,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppVoiceRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/drafts/$id': {
+      id: '/_authenticated/app/drafts/$id'
+      path: '/$id'
+      fullPath: '/app/drafts/$id'
+      preLoaderRoute: typeof AuthenticatedAppDraftsIdRouteImport
+      parentRoute: typeof AuthenticatedAppDraftsRoute
+    }
   }
 }
 
+interface AuthenticatedAppDraftsRouteChildren {
+  AuthenticatedAppDraftsIdRoute: typeof AuthenticatedAppDraftsIdRoute
+}
+
+const AuthenticatedAppDraftsRouteChildren: AuthenticatedAppDraftsRouteChildren =
+  {
+    AuthenticatedAppDraftsIdRoute: AuthenticatedAppDraftsIdRoute,
+  }
+
+const AuthenticatedAppDraftsRouteWithChildren =
+  AuthenticatedAppDraftsRoute._addFileChildren(
+    AuthenticatedAppDraftsRouteChildren,
+  )
+
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppDraftsRoute: typeof AuthenticatedAppDraftsRouteWithChildren
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppVoiceRoute: typeof AuthenticatedAppVoiceRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppDraftsRoute: AuthenticatedAppDraftsRouteWithChildren,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppVoiceRoute: AuthenticatedAppVoiceRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
@@ -266,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   PricingRoute: PricingRoute,
+  ShareTokenRoute: ShareTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
