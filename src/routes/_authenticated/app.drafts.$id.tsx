@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesUpdate } from "@/integrations/supabase/types";
 import { refineDraft } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/app/drafts/$id")({
@@ -78,7 +79,7 @@ function DraftEditor() {
   }, [messages?.length]);
 
   const save = useMutation({
-    mutationFn: async (patch: Record<string, unknown>) => {
+    mutationFn: async (patch: TablesUpdate<"drafts">) => {
       const { error } = await supabase.from("drafts").update(patch).eq("id", id);
       if (error) throw error;
     },
