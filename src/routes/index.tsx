@@ -431,7 +431,7 @@ function FinalCta() {
           <Link to="/auth">Start writing</Link>
         </Button>
         <p className="mt-4 text-xs text-muted-foreground">
-          One plan, ${SITE.priceMonthly}/month. Cancel anytime.
+          Free while in early access. No card needed.
         </p>
       </div>
     </section>
