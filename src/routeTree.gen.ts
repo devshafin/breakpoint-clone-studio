@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ShareTokenRouteImport } from './routes/share.$token'
@@ -40,11 +39,6 @@ const AuthRoute = AuthRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
@@ -94,7 +88,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/share/$token': typeof ShareTokenRoute
@@ -108,7 +101,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/share/$token': typeof ShareTokenRoute
   '/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
@@ -123,7 +115,6 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/share/$token': typeof ShareTokenRoute
@@ -139,7 +130,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/blog'
-    | '/pricing'
     | '/app'
     | '/blog/$slug'
     | '/share/$token'
@@ -153,7 +143,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/blog'
-    | '/pricing'
     | '/blog/$slug'
     | '/share/$token'
     | '/app/drafts'
@@ -167,7 +156,6 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/blog'
-    | '/pricing'
     | '/_authenticated/app'
     | '/blog/$slug'
     | '/share/$token'
@@ -183,7 +171,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
-  PricingRoute: typeof PricingRoute
   ShareTokenRoute: typeof ShareTokenRoute
 }
 
@@ -215,13 +202,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app': {
@@ -340,7 +320,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
-  PricingRoute: PricingRoute,
   ShareTokenRoute: ShareTokenRoute,
 }
 export const routeTree = rootRouteImport

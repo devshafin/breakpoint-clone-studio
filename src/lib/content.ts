@@ -4,8 +4,6 @@ export const SITE = {
   description:
     "Oxly Writer learns your voice from your own posts. Drop an idea, get a draft that sounds like you, refine it in chat, publish in one tap.",
   email: "hello@oxlywriter.app",
-  priceMonthly: 39,
-  priceYearly: 390,
 };
 
 export const DEMO_DRAFTS = [
@@ -76,7 +74,7 @@ export const FAQ = [
   },
   {
     q: `How much does it cost?`,
-    a: `One plan, $${SITE.priceMonthly} a month, or $${SITE.priceYearly} a year which works out at two months free. Build your voice profile first, subscribe after. Cancel anytime.`,
+    a: `Nothing. Every feature is free to use right now — sign up, build your voice profile, and start writing.`,
   },
   {
     q: "How is this different from a generic chatbot?",
@@ -105,6 +103,7 @@ export const ROADMAP = [
 ];
 
 export const PLAN_FEATURES = [
+  "Free while in early access — no card, no limits juggling",
   "Voice profile built from your own posts",
   "AI drafts in your voice: posts, threads, articles",
   "Chat refinement with accept / reject edits",
