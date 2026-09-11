@@ -16,9 +16,6 @@ export function SiteFooter() {
           <Link to="/" className="hover:text-foreground">
             Home
           </Link>
-          <Link to="/pricing" className="hover:text-foreground">
-            Pricing
-          </Link>
           <Link to="/blog" className="hover:text-foreground">
             Blog
           </Link>

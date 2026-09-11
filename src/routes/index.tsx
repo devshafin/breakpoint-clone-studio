@@ -367,13 +367,16 @@ function PricingBlock() {
   return (
     <section className="mx-auto w-full max-w-3xl px-5 py-16">
       <div className="warm-panel rounded-2xl p-8 text-center">
-        <p className="text-xs uppercase tracking-widest text-primary">Pro</p>
+        <p className="text-xs uppercase tracking-widest text-primary">Early access</p>
         <p className="mt-4 font-display text-5xl">
-          ${SITE.priceMonthly}
-          <span className="font-sans text-base text-muted-foreground"> / month</span>
+          Free
+          <span className="font-sans text-base text-muted-foreground">
+            {" "}
+            · everything included
+          </span>
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          or ${SITE.priceYearly} / year · two months free
+          No card, no seats, no trial clock. Bring your own keys if you want to.
         </p>
         <ul className="mx-auto mt-8 grid max-w-md gap-3 text-left">
           {PLAN_FEATURES.map((f) => (
