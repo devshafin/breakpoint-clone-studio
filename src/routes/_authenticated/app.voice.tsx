@@ -166,10 +166,6 @@ function VoicePage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-5 py-10">
       <h1 className="text-3xl">Your voice profile</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Trained on your own posts, not the internet&apos;s average. Every field is yours
-        to edit.
-      </p>
 
       {isLoading ? (
         <div className="mt-10 flex items-center gap-2 text-muted-foreground">

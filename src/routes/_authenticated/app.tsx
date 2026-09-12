@@ -25,7 +25,7 @@ function AppShell() {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <aside className="flex shrink-0 flex-col border-b border-border bg-sidebar px-4 py-4 md:w-60 md:border-b-0 md:border-r md:py-6">
-        <Link to="/" className="mb-6 flex items-center gap-2">
+        <Link to="/app/drafts" className="mb-6 flex items-center gap-2">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Asterisk className="size-5" />
           </span>

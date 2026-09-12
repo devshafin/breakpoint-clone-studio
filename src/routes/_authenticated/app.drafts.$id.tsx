@@ -282,9 +282,6 @@ function DraftEditor() {
 
       <aside className="flex min-h-[60vh] flex-col border-t border-border bg-sidebar p-5 lg:border-l lg:border-t-0">
         <h2 className="text-xl">Refine in chat</h2>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Say what to change. Highlight a line first to fix just that bit.
-        </p>
 
         <div className="mt-4 flex-1 space-y-3 overflow-y-auto">
           {(messages ?? []).map((m) => (
