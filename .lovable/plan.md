@@ -1,32 +1,29 @@
-# নিজের API key দিয়ে লেখা তৈরি
+# শুধু কাজের Oxly Writer
 
-এখন লেখা তৈরি হয় বিল্ট-ইন AI দিয়ে। এই কাজের পরে: Settings-এ যদি আপনার নিজের key যোগ করা থাকে এবং সেটিকে "ব্যবহার করো" হিসেবে বেছে নেন, তখন লেখা তৈরি, ভয়েস অ্যানালিসিস আর চ্যাটে এডিট — সবই আপনার নিজের key দিয়ে চলবে। key না থাকলে আগের মতোই বিল্ট-ইন AI চালু থাকবে।
+সাইট খুললেই ব্যবহারকারী সরাসরি কাজের জায়গায় যাবে। লগইন করা থাকলে Drafts, না থাকলে Login দেখাবে। বর্তমান লেখার editor, draft তৈরি, chat refinement, voice profile, settings এবং API key panel অপরিবর্তিতভাবে থাকবে।
 
-## যা যা হবে
+## পরিবর্তন
 
-**১. Settings-এ key প্যানেলে নতুন কিছু**
-- প্রতিটি key-র পাশে "Active" টগল — একসাথে একটাই সক্রিয় থাকবে।
-- মডেলের নাম লেখার ঘর (যেমন `gpt-4o-mini`, `claude-sonnet-4`, `gemini-2.5-flash`), খালি রাখলে প্রতিটি সার্ভিসের ডিফল্ট মডেল।
-- "Test key" বোতাম — একটা ছোট অনুরোধ পাঠিয়ে বলে দেবে key কাজ করছে কি না।
-- উপরে স্পষ্ট লেখা: কোন ইঞ্জিন এখন চালু (আপনার key, না বিল্ট-ইন)।
+1. হোম পেজের সব প্রচারণামূলক অংশ, demo copy, comparison, steps, roadmap, free-plan লেখা, FAQ এবং article teaser সরানো হবে।
+2. `/` খুললে session অনুযায়ী `/app/drafts` অথবা `/auth`-এ পাঠানো হবে।
+3. Blog-এর public navigation ও অপ্রয়োজনীয় public header/footer সরানো হবে; কাজের জায়গার sidebar-ই মূল navigation থাকবে।
+4. Settings থেকে “Everything is free” feature-list অংশ সরানো হবে; account ও API key panel থাকবে।
+5. Login page-এর অতিরিক্ত বিক্রয়ধর্মী বাক্য ছোট করে শুধু প্রয়োজনীয় sign-in/sign-up interface রাখা হবে।
+6. Draft list ও editor-এর সাহায্যকারী লেখা শুধু যেখানে ব্যবহার বুঝতে দরকার সেখানেই রাখা হবে।
 
-**২. লেখার ইঞ্জিন**
-- Voice analysis, Draft তৈরি, Chat refine — তিনটিই আগে দেখবে আপনার সক্রিয় key আছে কি না।
-- আছে → সেই সার্ভিসে পাঠাবে। নেই → বিল্ট-ইন AI।
-- আপনার key ভুল/মেয়াদ শেষ/লিমিট শেষ হলে সোজা বাংলা-ইংরেজি সহজ বার্তা দেখাবে, আর চাইলে বিল্ট-ইন দিয়ে আবার চেষ্টা করার বোতাম থাকবে।
-- সমর্থিত: OpenAI, Anthropic, Google AI, OpenRouter। X বা "Other" লেখার জন্য নয় — সেগুলো শুধু জমা থাকবে।
+## যা থাকবে
 
-**৩. নিরাপত্তা**
-- key শুধু সার্ভারে পড়া হবে; ব্রাউজারে আর পুরো key পাঠানো হবে না — তালিকায় শুধু ঢাকা অবস্থায় দেখাবে।
-- এখনকার "চোখ" বোতামে পুরো key দেখানোর ব্যবস্থাটা সরে যাবে (একবার সেভ করলে আর ফেরত দেখানো হবে না, নিরাপদ থাকার জন্য)।
-
-## যা এখনো পারা যাবে না
-X-এ সরাসরি পোস্ট করা — সেটার জন্য আলাদা X ডেভেলপার অ্যাকাউন্টের অনুমোদন লাগে; আপাতত Publish চাপলে লেখা কপি হয়।
+- Draft তৈরি, edit, delete ও status filter
+- Post, thread ও article format
+- Chat দিয়ে লেখা refine এবং accept/reject
+- Voice profile তৈরি ও edit
+- Source যোগ করা
+- Share link, copy ও বর্তমান publish behavior
+- Account settings ও API key যোগ/দেখা/মোছা
 
 ## কারিগরি দিক
-- `api_credentials` টেবিলে নতুন কলাম: `model text`, `is_active boolean default false`; একটি ইউনিক পার্শিয়াল ইনডেক্স `(user_id) where is_active` যাতে একসাথে একটাই সক্রিয় থাকে।
-- `api_credentials`-এ `api_key` কলামের উপর কলাম-লেভেল SELECT বাদ দিয়ে ক্লায়েন্টের জন্য একটি ভিউ/সীমিত select (`id, provider, label, model, is_active, notes, created_at`) ব্যবহার হবে; সার্ভার ফাংশন `context.supabase` দিয়ে পুরো row পড়বে (RLS-এ ইউজারের নিজের row)।
-- নতুন `src/lib/ai-provider.server.ts`: সক্রিয় credential আনা + provider অনুযায়ী endpoint/হেডার ম্যাপিং (OpenAI `/v1/chat/completions`, Anthropic `/v1/messages`, Google `generativeLanguage`, OpenRouter `/api/v1/chat/completions`), একটাই `chat(messages, jsonMode)` ইন্টারফেস।
-- `src/lib/ai.functions.ts`-এর `callGateway` এই রাউটারকে ডাকবে; fallback হিসেবে Lovable AI Gateway, মডেল `openai/gpt-6-astra` (Responses API, streaming, সার্ভার-সাইডে consume)।
-- নতুন সার্ভার ফাংশন `testApiKey({ id })` — ছোট ping অনুরোধ, `{ ok, message }` ফেরত।
-- সব প্রোভাইডার এরর status অনুযায়ী ব্যবহারকারীর ভাষায় বার্তায় রূপ নেবে (401 ভুল key, 429 বেশি অনুরোধ, 402 ক্রেডিট শেষ)।
+
+- `src/routes/index.tsx`-কে session-aware redirect route করা হবে।
+- `src/routes/auth.tsx`, app settings এবং প্রয়োজনমতো drafts interface-এর copy সংক্ষিপ্ত করা হবে।
+- সরানো public page বা link-এর সব references পরিষ্কার করা হবে, generated route file হাতে পরিবর্তন করা হবে না।
+- Desktop ও mobile-এ login, drafts এবং editor flow পরীক্ষা করা হবে।
