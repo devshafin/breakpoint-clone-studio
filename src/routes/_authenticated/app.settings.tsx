@@ -16,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { PLAN_FEATURES } from "@/lib/content";
 
 export const Route = createFileRoute("/_authenticated/app/settings")({
   component: SettingsPage,
@@ -115,17 +114,6 @@ function SettingsPage() {
 
       <ApiKeysPanel />
 
-      <section className="mt-6 rounded-xl border border-border bg-surface-2 p-6">
-        <h2 className="text-xl">Everything is free</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          There is no paid plan. Every feature below is on for your account.
-        </p>
-        <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-          {PLAN_FEATURES.map((f) => (
-            <li key={f}>· {f}</li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 }

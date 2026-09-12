@@ -128,9 +128,6 @@ function DraftsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl">Your drafts</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Everything you have written, in your own voice.
-          </p>
         </div>
         <Button onClick={() => setOpen(true)}>
           <Plus className="mr-2 size-4" /> New draft
@@ -201,10 +198,7 @@ function DraftsPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Drop an idea</DialogTitle>
-            <DialogDescription>
-              A half-thought works. Add a link or pasted text and every claim will trace
-              back to it.
-            </DialogDescription>
+            <DialogDescription>Enter an idea and choose a format.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">

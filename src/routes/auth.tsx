@@ -16,12 +16,12 @@ export const Route = createFileRoute("/auth")({
       { title: `Log in or sign up — ${SITE.name}` },
       {
         name: "description",
-        content: `Create your ${SITE.name} account and get your first draft in your own voice in minutes.`,
+        content: `Log in or create your ${SITE.name} account.`,
       },
       { property: "og:title", content: `Log in or sign up — ${SITE.name}` },
       {
         property: "og:description",
-        content: "Create your account and get a draft that sounds like you.",
+        content: `Log in or create your ${SITE.name} account.`,
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -102,14 +102,7 @@ function AuthPage() {
         </Link>
 
         <div className="warm-panel rounded-2xl p-8">
-          <h1 className="text-3xl">
-            {mode === "login" ? "Welcome back" : "Create your workspace"}
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {mode === "login"
-              ? "Pick up where your drafts left off."
-              : "Build a voice profile, then read your first draft in minutes."}
-          </p>
+          <h1 className="text-3xl">{mode === "login" ? "Log in" : "Create account"}</h1>
 
           <Button
             type="button"
