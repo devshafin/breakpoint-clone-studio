@@ -1,8 +1,6 @@
-import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { Asterisk, FileText, LogOut, Settings, Sparkles } from "lucide-react";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { Asterisk, FileText, Settings, Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/app")({
   component: AppShell,
@@ -15,13 +13,6 @@ const LINKS = [
 ] as const;
 
 function AppShell() {
-  const navigate = useNavigate();
-
-  async function signOut() {
-    await supabase.auth.signOut();
-    navigate({ to: "/auth" });
-  }
-
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <aside className="flex shrink-0 flex-col border-b border-border bg-sidebar px-4 py-4 md:w-60 md:border-b-0 md:border-r md:py-6">
@@ -46,14 +37,6 @@ function AppShell() {
           ))}
         </nav>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={signOut}
-          className="mt-auto hidden justify-start text-muted-foreground md:flex"
-        >
-          <LogOut className="mr-2 size-4" /> Sign out
-        </Button>
       </aside>
 
       <main className="min-w-0 flex-1">
