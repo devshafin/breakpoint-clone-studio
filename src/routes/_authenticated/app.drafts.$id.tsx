@@ -24,6 +24,16 @@ export const Route = createFileRoute("/_authenticated/app/drafts/$id")({
 
 type Kind = "post" | "thread" | "article";
 
+const QUICK = [
+  "Stronger hook",
+  "Punchier",
+  "Shorter",
+  "More personal",
+  "Add a concrete example",
+  "Sound more like me",
+  "Better ending",
+];
+
 function randomToken() {
   return Array.from(crypto.getRandomValues(new Uint8Array(12)))
     .map((b) => b.toString(36).padStart(2, "0"))
@@ -88,7 +98,9 @@ function DraftEditor() {
   });
 
   const refine = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (override?: string) => {
+      const text = (override ?? instruction).trim();
+      const sel = override ? "" : selection;
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
       if (!userId) throw new Error("Not signed in");
@@ -102,13 +114,13 @@ function DraftEditor() {
         draft_id: id,
         user_id: userId,
         role: "user",
-        content: selection ? `${instruction}\n\n> ${selection}` : instruction,
+        content: sel ? `${text}\n\n> ${sel}` : text,
       });
 
       const result = await refineDraft({
         data: {
-          instruction,
-          selection: selection || undefined,
+          instruction: text,
+          selection: sel || undefined,
           segments,
           kind: (draft?.kind as Kind) ?? "post",
           voice: voice ?? null,
@@ -305,17 +317,31 @@ function DraftEditor() {
           </p>
         )}
 
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {QUICK.map((q) => (
+            <button
+              key={q}
+              type="button"
+              disabled={refine.isPending || segments.length === 0}
+              onClick={() => refine.mutate(q)}
+              className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-foreground disabled:opacity-50"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+
         <div className="mt-3 flex gap-2">
           <Input
             value={instruction}
             onChange={(e) => setInstruction(e.target.value)}
-            placeholder="make it punchier"
+            placeholder="tell your ghostwriter what to change"
             onKeyDown={(e) => {
-              if (e.key === "Enter" && instruction.trim()) refine.mutate();
+              if (e.key === "Enter" && instruction.trim()) refine.mutate(undefined);
             }}
           />
           <Button
-            onClick={() => refine.mutate()}
+            onClick={() => refine.mutate(undefined)}
             disabled={refine.isPending || !instruction.trim()}
             size="icon"
             aria-label="Send instruction"

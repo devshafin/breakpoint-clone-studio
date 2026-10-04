@@ -15,9 +15,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
-import { Route as AuthenticatedAppDraftsRouteImport } from './routes/_authenticated/app.drafts'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppVoiceRouteImport } from './routes/_authenticated/app.voice'
+import { Route as AuthenticatedAppDraftsIndexRouteImport } from './routes/_authenticated/app.drafts.index'
 import { Route as AuthenticatedAppDraftsIdRouteImport } from './routes/_authenticated/app.drafts.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -49,11 +49,6 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
-const AuthenticatedAppDraftsRoute = AuthenticatedAppDraftsRouteImport.update({
-  id: '/drafts',
-  path: '/drafts',
-  getParentRoute: () => AuthenticatedAppRoute,
-} as any)
 const AuthenticatedAppSettingsRoute =
   AuthenticatedAppSettingsRouteImport.update({
     id: '/settings',
@@ -65,11 +60,17 @@ const AuthenticatedAppVoiceRoute = AuthenticatedAppVoiceRouteImport.update({
   path: '/voice',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppDraftsIndexRoute =
+  AuthenticatedAppDraftsIndexRouteImport.update({
+    id: '/drafts/',
+    path: '/drafts/',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppDraftsIdRoute =
   AuthenticatedAppDraftsIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedAppDraftsRoute,
+    id: '/drafts/$id',
+    path: '/drafts/$id',
+    getParentRoute: () => AuthenticatedAppRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -77,21 +78,21 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
   '/share/$token': typeof ShareTokenRoute
-  '/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/voice': typeof AuthenticatedAppVoiceRoute
   '/app/': typeof AuthenticatedAppIndexRoute
   '/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
+  '/app/drafts/': typeof AuthenticatedAppDraftsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/share/$token': typeof ShareTokenRoute
-  '/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/app/settings': typeof AuthenticatedAppSettingsRoute
   '/app/voice': typeof AuthenticatedAppVoiceRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
+  '/app/drafts': typeof AuthenticatedAppDraftsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,11 +101,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
   '/share/$token': typeof ShareTokenRoute
-  '/_authenticated/app/drafts': typeof AuthenticatedAppDraftsRouteWithChildren
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/app/voice': typeof AuthenticatedAppVoiceRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_authenticated/app/drafts/$id': typeof AuthenticatedAppDraftsIdRoute
+  '/_authenticated/app/drafts/': typeof AuthenticatedAppDraftsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,21 +114,21 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app'
     | '/share/$token'
-    | '/app/drafts'
     | '/app/settings'
     | '/app/voice'
     | '/app/'
     | '/app/drafts/$id'
+    | '/app/drafts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/share/$token'
-    | '/app/drafts'
     | '/app/settings'
     | '/app/voice'
     | '/app'
     | '/app/drafts/$id'
+    | '/app/drafts'
   id:
     | '__root__'
     | '/'
@@ -135,11 +136,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/app'
     | '/share/$token'
-    | '/_authenticated/app/drafts'
     | '/_authenticated/app/settings'
     | '/_authenticated/app/voice'
     | '/_authenticated/app/'
     | '/_authenticated/app/drafts/$id'
+    | '/_authenticated/app/drafts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -193,13 +194,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
-    '/_authenticated/app/drafts': {
-      id: '/_authenticated/app/drafts'
-      path: '/drafts'
-      fullPath: '/app/drafts'
-      preLoaderRoute: typeof AuthenticatedAppDraftsRouteImport
-      parentRoute: typeof AuthenticatedAppRoute
-    }
     '/_authenticated/app/settings': {
       id: '/_authenticated/app/settings'
       path: '/settings'
@@ -214,42 +208,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppVoiceRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/drafts/': {
+      id: '/_authenticated/app/drafts/'
+      path: '/drafts'
+      fullPath: '/app/drafts/'
+      preLoaderRoute: typeof AuthenticatedAppDraftsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/drafts/$id': {
       id: '/_authenticated/app/drafts/$id'
-      path: '/$id'
+      path: '/drafts/$id'
       fullPath: '/app/drafts/$id'
       preLoaderRoute: typeof AuthenticatedAppDraftsIdRouteImport
-      parentRoute: typeof AuthenticatedAppDraftsRoute
+      parentRoute: typeof AuthenticatedAppRoute
     }
   }
 }
 
-interface AuthenticatedAppDraftsRouteChildren {
-  AuthenticatedAppDraftsIdRoute: typeof AuthenticatedAppDraftsIdRoute
-}
-
-const AuthenticatedAppDraftsRouteChildren: AuthenticatedAppDraftsRouteChildren =
-  {
-    AuthenticatedAppDraftsIdRoute: AuthenticatedAppDraftsIdRoute,
-  }
-
-const AuthenticatedAppDraftsRouteWithChildren =
-  AuthenticatedAppDraftsRoute._addFileChildren(
-    AuthenticatedAppDraftsRouteChildren,
-  )
-
 interface AuthenticatedAppRouteChildren {
-  AuthenticatedAppDraftsRoute: typeof AuthenticatedAppDraftsRouteWithChildren
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppVoiceRoute: typeof AuthenticatedAppVoiceRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
+  AuthenticatedAppDraftsIdRoute: typeof AuthenticatedAppDraftsIdRoute
+  AuthenticatedAppDraftsIndexRoute: typeof AuthenticatedAppDraftsIndexRoute
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
-  AuthenticatedAppDraftsRoute: AuthenticatedAppDraftsRouteWithChildren,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppVoiceRoute: AuthenticatedAppVoiceRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
+  AuthenticatedAppDraftsIdRoute: AuthenticatedAppDraftsIdRoute,
+  AuthenticatedAppDraftsIndexRoute: AuthenticatedAppDraftsIndexRoute,
 }
 
 const AuthenticatedAppRouteWithChildren =
