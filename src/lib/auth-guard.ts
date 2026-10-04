@@ -10,9 +10,9 @@ import type { Database } from "@/integrations/supabase/types";
  * so AI features keep working in every hosting environment.
  */
 export const requireSession = createMiddleware({ type: "function" }).server(async ({ next }) => {
-  const url = process.env["SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL;
+  const url = process.env["SUPABASE_URL"] || import.meta.env["VITE_SUPABASE_URL"];
   const key =
-    process.env["SUPABASE_PUBLISHABLE_KEY"] || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    process.env["SUPABASE_PUBLISHABLE_KEY"] || import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
   if (!url || !key) throw new Error("The workspace is not connected yet. Try again shortly.");
 
   const auth = getRequest()?.headers.get("authorization");
