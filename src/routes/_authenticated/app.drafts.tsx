@@ -32,6 +32,13 @@ export const Route = createFileRoute("/_authenticated/app/drafts")({
 
 type Kind = "post" | "thread" | "article";
 const STATUSES = ["all", "draft", "ready", "posted"] as const;
+const GOALS = [
+  { value: "teach", label: "Teach something", prompt: "teach a useful lesson the reader can apply today" },
+  { value: "story", label: "Tell a story", prompt: "tell a personal story with a clear lesson" },
+  { value: "opinion", label: "Hot take", prompt: "argue a strong, contrarian opinion" },
+  { value: "announce", label: "Share news / launch", prompt: "announce something without sounding like a press release" },
+  { value: "engage", label: "Start a conversation", prompt: "spark replies and discussion" },
+] as const;
 
 function DraftsPage() {
   const navigate = useNavigate();
@@ -41,6 +48,8 @@ function DraftsPage() {
   const [idea, setIdea] = useState("");
   const [kind, setKind] = useState<Kind>("thread");
   const [sourceText, setSourceText] = useState("");
+  const [goal, setGoal] = useState("teach");
+  const [notes, setNotes] = useState("");
 
   const { data: drafts, isLoading } = useQuery({
     queryKey: ["drafts"],
@@ -70,7 +79,14 @@ function DraftsPage() {
         : [];
 
       const result = await generateDraft({
-        data: { idea, kind, sources, voice: voice ?? null },
+        data: {
+          idea,
+          kind,
+          goal: GOALS.find((g) => g.value === goal)?.prompt,
+          notes: notes.trim() || undefined,
+          sources,
+          voice: voice ?? null,
+        },
       });
 
       const { data: inserted, error } = await supabase
@@ -97,12 +113,23 @@ function DraftsPage() {
           })),
         );
       }
+      if (result.hooks.length) {
+        await supabase.from("draft_messages").insert({
+          draft_id: inserted.id,
+          user_id: userId,
+          role: "assistant",
+          content: `Other hooks you could open with:\n\n${result.hooks
+            .map((h, i) => `${i + 1}. ${h}`)
+            .join("\n\n")}\n\nSay "use hook 2" to swap it in.`,
+        });
+      }
       return inserted;
     },
     onSuccess: (draft) => {
       setOpen(false);
       setIdea("");
       setSourceText("");
+      setNotes("");
       queryClient.invalidateQueries({ queryKey: ["drafts"] });
       navigate({ to: "/app/drafts/$id", params: { id: draft.id } });
     },
@@ -198,9 +225,9 @@ function DraftsPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Drop an idea</DialogTitle>
-            <DialogDescription>Enter an idea and choose a format.</DialogDescription>
+            <DialogDescription>Your ghostwriter turns it into a post in your voice.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-1">
             <div className="space-y-2">
               <Label htmlFor="idea">Your idea</Label>
               <Textarea
@@ -223,6 +250,31 @@ function DraftsPage() {
                   <SelectItem value="article">Article</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Goal</Label>
+              <Select value={goal} onValueChange={setGoal}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {GOALS.map((g) => (
+                    <SelectItem key={g.value} value={g.value}>
+                      {g.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="notes">Details only you know (optional)</Label>
+              <Textarea
+                id="notes"
+                rows={2}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="numbers, a moment that happened, who it's for…"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="source">Sources (optional)</Label>
