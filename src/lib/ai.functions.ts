@@ -17,6 +17,8 @@ async function callGateway(messages: ChatMessage[]) {
   const input = messages
     .filter((m) => m.role !== "system")
     .map((m) => ({ role: m.role, content: m.content }));
+  const last = input[input.length - 1];
+  if (last) last.content += "\n\nReply with the JSON object only.";
 
   const res = await fetch(GATEWAY, {
     method: "POST",
