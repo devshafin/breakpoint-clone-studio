@@ -26,7 +26,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { generateDraft } from "@/lib/ai.functions";
 
-export const Route = createFileRoute("/_authenticated/app/drafts")({
+export const Route = createFileRoute("/_authenticated/app/drafts/")({
   component: DraftsPage,
 });
 
